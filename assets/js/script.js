@@ -1,10 +1,12 @@
 // DOM object references
-var buttonEl = document.querySelector("#save-task");
+var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.getElementById("tasks-to-do");
 
 
 // dynamically create task item (it is important this function comes before event listener)
-var createTaskHandler = function() {
+var createTaskHandler = function(event) {
+    event.preventDefault()
+    
     var listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
     listItemEl.textContent = "This is a new task.";
@@ -12,5 +14,8 @@ var createTaskHandler = function() {
 };
 
 // event listener
-// uses createTaskHandler is the callback function
-buttonEl.addEventListener("click", createTaskHandler);
+// uses createTaskHandler as the callback function
+formEl.addEventListener("submit", createTaskHandler);
+// submit type listens for 
+    // when a user clicks a <button> with type="submit"
+    // or when a user presses Enter on their keyboard
