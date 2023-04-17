@@ -1,3 +1,4 @@
+var pageContentEl = document.querySelector("#page-content");
 var taskIdCounter = 0;
 
 // DOM object references
@@ -103,3 +104,21 @@ formEl.addEventListener("submit", taskFormHandler);
 // submit type listens for 
     // when a user clicks a <button> with type="submit"
     // or when a user presses Enter on their keyboard
+
+var deleteTask = function(taskId) {
+    // no space between class and attribute tells query to look for item with both
+    // a space between them would tell query to look for an element with the attribute INSIDE an element with the class 
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    taskSelected.remove();
+};
+
+var taskButtonHandler = function(event) {
+    if (event.target.matches(".delete-btn")) {
+        // get the element's task id
+        var taskId = event.target.getAttribute("data-task-id");
+        deleteTask(taskId);
+    }
+};
+
+// event listener for delete buttons
+pageContentEl.addEventListener("click", taskButtonHandler);
