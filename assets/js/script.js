@@ -4,6 +4,8 @@ var taskIdCounter = 0;
 // DOM object references
 var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.getElementById("tasks-to-do");
+var tasksInProgressEl = document.querySelector("#tasks-in-progress");
+var tasksCompletedEl = document.getElementById("tasks-completed");
 
 
 // dynamically create task item (it is important this function comes before event listener)
@@ -105,7 +107,7 @@ var createTaskActions = function(taskId) {
     statusSelectEl.setAttribute("name", "status-change");
     statusSelectEl.setAttribute("data-task-id", taskId);
 
-    var statusChoices = ["To Do", "In Progress", "Conpleted"];
+    var statusChoices = ["To Do", "In Progress", "Completed"];
     for (var i = 0; i < statusChoices.length; i++) {
         // create option element
         var statusOptionEl = document.createElement("option");
@@ -170,5 +172,29 @@ var deleteTask = function(taskId) {
     taskSelected.remove();
 };
 
-// event listener for delete buttons
+// event listener for delete and edit buttons
 pageContentEl.addEventListener("click", taskButtonHandler);
+
+var taskStatusChangeHandler = function(event) {
+    // get the task item's id 
+    var taskId = event.target.getAttribute("data-task-id");
+
+    // get the currently selected option's value and convert to lowercase (to future proof)
+    var statusValue = event.target.value.toLowerCase();
+
+    // find the parent task item element based on the id
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+
+    if (statusValue === "to do") {
+        tasksToDoEl.appendChild(taskSelected);
+    }
+    else if (statusValue === "in progress") {
+        tasksInProgressEl.appendChild(taskSelected);
+    }
+    else if (statusValue === "completed") {
+        tasksCompletedEl.appendChild(taskSelected);
+    }
+};
+
+// event listener for select element
+pageContentEl.addEventListener("change", taskStatusChangeHandler);
