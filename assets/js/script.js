@@ -8,7 +8,6 @@ var tasksToDoEl = document.getElementById("tasks-to-do");
 var tasksInProgressEl = document.querySelector("#tasks-in-progress");
 var tasksCompletedEl = document.getElementById("tasks-completed");
 
-
 // dynamically create task item (it is important this function comes before event listener)
 var taskFormHandler = function(event) {
     event.preventDefault()
@@ -70,6 +69,9 @@ var createTaskEl = function(taskDataObj) {
     // add entire list item to list
     tasksToDoEl.appendChild(listItemEl);
 
+    // save updated array to localStorage
+    saveTasks();
+
     // increase task counter for next unique id
     taskIdCounter++;
 };
@@ -89,6 +91,9 @@ var completeEditTask = function(taskName, taskType, taskId) {
             tasks[i].type = taskType;
         }
     }
+
+    // save updated array to localStorage
+    saveTasks();
 
     alert("Task Updated!");
     formEl.removeAttribute("data-task-id");
@@ -136,13 +141,6 @@ var createTaskActions = function(taskId) {
 
     return actionContainerEl;
 };
-
-// event listener
-// uses taskFormHandler as the callback function
-formEl.addEventListener("submit", taskFormHandler);
-// submit type listens for 
-    // when a user clicks a <button> with type="submit"
-    // or when a user presses Enter on their keyboard
 
 var taskButtonHandler = function(event) {
     // get target element from event
@@ -198,10 +196,10 @@ var deleteTask = function(taskId) {
 
     // reassign tasks array to be the same as updatedTaskArr
     tasks = updatedTaskArr;
-};
 
-// event listener for delete and edit buttons
-pageContentEl.addEventListener("click", taskButtonHandler);
+    // save updated array to localStorage
+    saveTasks();
+};
 
 var taskStatusChangeHandler = function(event) {
     // get the task item's id 
@@ -229,7 +227,25 @@ var taskStatusChangeHandler = function(event) {
             tasks[i].status = statusValue;
         }
     }
+
+    // save updated array to localStorage
+    saveTasks();
 };
+
+
+var saveTasks = function() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+};
+
+// event listener
+// uses taskFormHandler as the callback function
+formEl.addEventListener("submit", taskFormHandler);
+// submit type listens for 
+    // when a user clicks a <button> with type="submit"
+    // or when a user presses Enter on their keyboard
+
+// event listener for delete and edit buttons
+pageContentEl.addEventListener("click", taskButtonHandler);
 
 // event listener for select element
 pageContentEl.addEventListener("change", taskStatusChangeHandler);
